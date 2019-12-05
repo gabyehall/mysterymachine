@@ -1,14 +1,14 @@
 #if breeze detected, adjusts squares
-def breeze(board, cur_y, cur_x):
+def breeze(board, cur_y, cur_x, hole_count):
     board[cur_y][cur_x] += "B "
     if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += "Ph "
+        board[cur_y-1][cur_x] += str(hole_count)+"Ph "
     if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += "Ph "
+        board[cur_y+1][cur_x] += str(hole_count)+"Ph "
     if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += "Ph "
+        board[cur_y][cur_x-1] += str(hole_count)+"Ph "
     if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += "Ph "
+        board[cur_y][cur_x+1] += str(hole_count)+"Ph "
     return board
 
 #if smell detected, adjusts squares
@@ -154,11 +154,12 @@ def determine_tile_type(board, cur_y, cur_x):
 #input sense as a list (if multiple inputs)
 #runs through all the logic to update the board
 #WORK IN PROGRESS - WILL THERE BE MULTIPLE INPUTS? (will aftect 'N' statements)
-def run_round(board, sense, cur_y, cur_x):
+def run_round(board, sense, cur_y, cur_x, hole_count):
     if "" in sense:
         board[cur_y][cur_x] = "S "
     if "breeze" in sense:
-        board = breeze(board, cur_y, cur_x)
+        board = breeze(board, cur_y, cur_x, hole_count)
+        hole_count += 1
     if "smell" in sense:
         board = smell(board, cur_y, cur_x)
     if "glitter" in sense:
@@ -173,7 +174,7 @@ def run_round(board, sense, cur_y, cur_x):
     board = safe_check(board)
     board = wumpus_check(board)
     board = check_2_board(board)
-    return board
+    return board, hole_count
 
 #prints the board - NO RETURN
 def print_board(board):
@@ -201,6 +202,8 @@ y = 3
 print_board(tile_board)
 tile_board[y][x] += "S "
 
+hole_count = 1
+
 #main simulator
 while True:
     direction = ""
@@ -211,7 +214,7 @@ while True:
         break
     
     sensed = input("Enter sense: ")
-    tile_board = run_round(tile_board, sensed, y, x)
+    tile_board, hole_count = run_round(tile_board, sensed, y, x, hole_count)
     
     print_board(tile_board)
     print("CURRENT X:",x)
