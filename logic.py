@@ -195,6 +195,72 @@ def print_board(board):
             print("{:<10}".format(board[i][j]),end="")
         print("")
 
+#moves the robot based on direction to move and current direction it is facing
+def move(direction, facing, mL, mR):
+    if facing=="up":
+        if direction=="left":
+            #left(mL,mR)
+            #forward(mL,mR)
+        elif direction=="right":
+            #right(mL,mR)
+            #forward(mL,mR)
+        elif direction=="up":
+            #forward(mL,mR)
+        elif direction=="down":
+            #right(mL,mR)
+            #right(mL,mR)
+            #forward(mL,mR)
+    elif facing=="down":
+        if direction=="left":
+            #right(mL,mR)
+            #forward(mL,mR)
+        elif direction=="right":
+            #left(mL,mR)
+            #forward(mL,mR)
+        elif direction=="up":
+            #right(mL,mR)
+            #right(mL,mR)
+            #forward(mL,mR)
+        elif direction=="down":
+            #forward(mL,mR)
+    elif facing=="right":
+        if direction=="left":
+            #right(mL,mR)
+            #right(mL,mR)
+            #forward(mL,mR)
+        elif direction=="right":
+            #forward(mL,mR)
+        elif direction=="up":
+            #left(mL,mR)
+            #forward(mL,mR)
+        elif direction=="down":
+            #right(mL,mR)
+            #forward(mL,mR)
+    elif facing=="right":
+        if direction=="left":
+            #right(mL,mR)
+            #right(mL,mR)
+            #forward(mL,mR)
+        elif direction=="right":
+            #forward(mL,mR)
+        elif direction=="up":
+            #left(mL,mR)
+            #forward(mL,mR)
+        elif direction=="down":
+            #right(mL,mR)
+            #forward(mL,mR)
+
+#applies the move function and automatically - makes robot move autonmously
+def search(board, sense, cur_y, cur_x, hole_count, ):
+    board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count):
+    
+    """Apply the movement logic here for when there is no
+    Cw in the board. Refer to guide in google docs
+    
+    Use move function based on which direction the logic in
+    docs says to go"""
+
+
 
 
 
@@ -214,6 +280,7 @@ tile_board[y][x] += "S "
 
 hole_count = 1
 current_direction = "up"
+
 
 #main simulator
 while True:
