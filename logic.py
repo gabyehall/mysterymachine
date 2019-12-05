@@ -79,6 +79,17 @@ def check_2(board, cur_y, cur_x):
     wump_check = board[cur_y][cur_x].count("Pw ")
     gold_check = board[cur_y][cur_x].count("Pg ")
     if hole_check>1:
+        pre_overlap = set(board[cur_y][cur_x].strip(".").split(" "))
+        for i in range(4):
+            for j in range(4):
+                current_overlap = set(board[i][j].strip(".").split(" "))
+                overlap = list(pre_overlap&current_overlap)
+                overlap = str(overlap).replace("'","").replace(",","").replace("[","").replace("]","")
+                overlap_count = overlap.count("Ph")
+                cur_tile_type = determine_tile_type(board, i, j)
+                if overlap_count>0 and cur_y!=i and cur_x!=j and (cur_tile_type=="edge" or cur_tile_type=="corner"):
+                    print("delete")
+                    board[i][j] = str(board[i][j]).replace("Ph","")
         board[cur_y][cur_x] = "Ch "
     elif wump_check>1:
         board[cur_y][cur_x] = "Cw "
@@ -195,7 +206,6 @@ for i in range(4):
     for j in range(4):
         tile_board[i][j] = (".")
 
-
 #starting coordinates
 x = 0
 y = 3
@@ -203,6 +213,7 @@ print_board(tile_board)
 tile_board[y][x] += "S "
 
 hole_count = 1
+current_direction = "up"
 
 #main simulator
 while True:
