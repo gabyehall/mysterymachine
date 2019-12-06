@@ -25,15 +25,15 @@ def forward(left_motor, right_motor):
     right_motor.off()
 
 def right(left_motor, right_motor):
-    left_motor.on(12.5)
-    right_motor.on(-12.5)
+    left_motor.on(15)
+    right_motor.on(-15)
     sleep(2)
     left_motor.off()
     right_motor.off()
 
 def left(left_motor, right_motor):
-    left_motor.on(-12.5)
-    right_motor.on(12.5)
+    left_motor.on(-15)
+    right_motor.on(15)
     sleep(2)
     left_motor.off()
     right_motor.off()
@@ -567,7 +567,7 @@ if __name__ == '__main__':
         sensed = ""
         
         sensed = input("Enter sense: ")
-        tile_board, hole_count, current_direction, cur_y, cur_x = search(tile_board, sensed, y, x, hole_count, current_direction , mL, mR)
+        tile_board, hole_count, current_direction, y, x = search(tile_board, sensed, y, x, hole_count, current_direction , mL, mR)
         
         if current_direction=="STOP":
             print("puzzle solved!")
