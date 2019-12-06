@@ -1,3 +1,6 @@
+#brickrun -r ./final.py
+
+
 #!/usr/bin/env python3
 '''Hello to the world from ev3dev.org'''
 
@@ -10,8 +13,8 @@ ON = True
 OFF = False
 
 def forward(left_motor, right_motor):
-    left_motor.on(40)
-    right_motor.on(40)
+    left_motor.on(-40)
+    right_motor.on(-40)
     sleep(2)
     left_motor.off()
     right_motor.off()
@@ -85,83 +88,107 @@ os.system('setfont Lat15-TerminusBold14')
 mL = LargeMotor('outB'); mL.stop_action = 'hold'
 mR = LargeMotor('outC'); mR.stop_action = 'hold'
 
-
+gun = MediumMotor('outA'); gun.stop_action = 'hold'
 
 
 #if breeze detected, adjusts squares
 def breeze(board, cur_y, cur_x, hole_count):
-    board[cur_y][cur_x] += "B "
-    if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += str(hole_count)+"Ph "
-    if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += str(hole_count)+"Ph "
-    if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += str(hole_count)+"Ph "
-    if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += str(hole_count)+"Ph "
-    return board
+    if "x" in board[cur_y][cur_x]:
+        return board
+    else:
+        board[cur_y][cur_x] += "B "
+        if cur_y-1 > -1:
+            board[cur_y-1][cur_x] += str(hole_count)+"Ph "
+        if cur_y+1 < 4:
+            board[cur_y+1][cur_x] += str(hole_count)+"Ph "
+        if cur_x-1 > -1:
+            board[cur_y][cur_x-1] += str(hole_count)+"Ph "
+        if cur_x+1 < 4:
+            board[cur_y][cur_x+1] += str(hole_count)+"Ph "
+        board[cur_y][cur_x] += "x "
+        return board
 
 #if smell detected, adjusts squares
 def smell(board, cur_y, cur_x):
-    board[cur_y][cur_x] += "Sm "
-    if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += "Pw "
-    if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += "Pw "
-    if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += "Pw "
-    if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += "Pw "
-    return board
+    if "x" in board[cur_y][cur_x]:
+        return board
+    else:    
+        board[cur_y][cur_x] += "Sm "
+        if cur_y-1 > -1:
+            board[cur_y-1][cur_x] += "Pw "
+        if cur_y+1 < 4:
+            board[cur_y+1][cur_x] += "Pw "
+        if cur_x-1 > -1:
+            board[cur_y][cur_x-1] += "Pw "
+        if cur_x+1 < 4:
+            board[cur_y][cur_x+1] += "Pw "
+        board[cur_y][cur_x] += "x "
+        return board
 
 #if glitter detected, adjusts squares
 def glitter(board, cur_y, cur_x):
-    board[cur_y][cur_x] += "Gl "
-    if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += "Pg "
-    if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += "Pg "
-    if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += "Pg "
-    if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += "Pg "
-    return board
+    if "x" in board[cur_y][cur_x]:
+        return board
+    else:
+        board[cur_y][cur_x] += "Gl "
+        if cur_y-1 > -1:
+            board[cur_y-1][cur_x] += "Pg "
+        if cur_y+1 < 4:
+            board[cur_y+1][cur_x] += "Pg "
+        if cur_x-1 > -1:
+            board[cur_y][cur_x-1] += "Pg "
+        if cur_x+1 < 4:
+            board[cur_y][cur_x+1] += "Pg "
+        board[cur_y][cur_x] += "x "
+        return board
 
 #if no breeze detected, adjusts squares
 def no_breeze(board, cur_y, cur_x):
-    if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += "Nh "
-    if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += "Nh "
-    if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += "Nh "
-    if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += "Nh "
-    return board
+    if "x" in board[cur_y][cur_x]:
+        return board
+    else:
+        if cur_y-1 > -1:
+            board[cur_y-1][cur_x] += "Nh "
+        if cur_y+1 < 4:
+            board[cur_y+1][cur_x] += "Nh "
+        if cur_x-1 > -1:
+            board[cur_y][cur_x-1] += "Nh "
+        if cur_x+1 < 4:
+            board[cur_y][cur_x+1] += "Nh "
+        board[cur_y][cur_x] += "x "
+        return board
 
 #if no smell detected, adjusts squares
 def no_smell(board, cur_y, cur_x):
-    if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += "Ns "
-    if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += "Ns "
-    if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += "Ns "
-    if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += "Ns "
-    return board
+    if "x" in board[cur_y][cur_x]:
+        return board
+    else:
+        if cur_y-1 > -1:
+            board[cur_y-1][cur_x] += "Ns "
+        if cur_y+1 < 4:
+            board[cur_y+1][cur_x] += "Ns "
+        if cur_x-1 > -1:
+            board[cur_y][cur_x-1] += "Ns "
+        if cur_x+1 < 4:
+            board[cur_y][cur_x+1] += "Ns "
+        board[cur_y][cur_x] += "x "
+        return board
 
 #if no glitter detected, adjusts squares
 def no_glitter(board, cur_y, cur_x):
-    if cur_y-1 > -1:
-        board[cur_y-1][cur_x] += "Ng "
-    if cur_y+1 < 4:
-        board[cur_y+1][cur_x] += "Ng "
-    if cur_x-1 > -1:
-        board[cur_y][cur_x-1] += "Ng "
-    if cur_x+1 < 4:
-        board[cur_y][cur_x+1] += "Ng "
-    return board
+    if "x" in board[cur_y][cur_x]:
+        return board
+    else:
+        if cur_y-1 > -1:
+            board[cur_y-1][cur_x] += "Ng "
+        if cur_y+1 < 4:
+            board[cur_y+1][cur_x] += "Ng "
+        if cur_x-1 > -1:
+            board[cur_y][cur_x-1] += "Ng "
+        if cur_x+1 < 4:
+            board[cur_y][cur_x+1] += "Ng "
+        board[cur_y][cur_x] += "x "
+        return board
 
 #check if 2 or more possibles for a space, convert to certain
 def check_2(board, cur_y, cur_x):
@@ -459,7 +486,9 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                             forward(mL, mR) 
         else:
             move(surround, facing, mL, mR)
-            """SHOOT USING THE 3RD MOTOR"""
+            gun.on(100)
+            sleep(5)
+            gun.off()
     
     for i in range(4):
         for j in range(4):
