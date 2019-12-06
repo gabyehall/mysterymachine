@@ -4,7 +4,7 @@
 
 """RIGHT CLICK 'VELMA' AND CLICK OPEN SSH TERMINAL"""
 """TYPE THESE IN:"""
-#cd vcode-hello-python-master
+#cd vscode-hello-python-master
 #brickrun -r ./final.py
 
 
@@ -402,17 +402,17 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
             cw_count += board[i][j].count("Cw ")
     #generalized movement when unsure of where wumpus is
     if cw_count==0:
-        if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]):
+        if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>0 and cur_y<3):
             facing = move("up", facing, mL, mR)
             forward(mL, mR)
             cur_y -= 1
         else:
-            if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]):
+            if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>0 and cur_x<3):
                 facing = move("right", facing, mL, mR)
                 forward(mL, mR)
                 cur_x += 1
             else:
-                if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]):
+                if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]) and (cur_y+1>0 and cur_y<3):
                     facing = move("down", facing, mL, mR)
                     forward(mL, mR)
                     cur_y += 1
@@ -434,17 +434,17 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
         #get to wumpus via fastest route
         if surround=="none":
             if w_y<cur_y:
-                if (("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x])) and (cur_y+1>=0 and cur_y<=3):
+                if (("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x])) and (cur_y+1>0 and cur_y<3):
                     facing = move("down", facing, mL, mR)
                     forward(mL, mR)
                     cur_y += 1
                 else:
-                    if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>=0 and cur_x<=3):
+                    if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>0 and cur_x<3):
                         facing = move("right", facing, mL, mR)
                         forward(mL, mR)
                         cur_x += 1
                     else:
-                        if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>=0 and cur_y<=3):
+                        if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>0 and cur_y<3):
                             facing = move("up", facing, mL, mR)
                             forward(mL, mR)
                             cur_y -= 1
@@ -453,17 +453,17 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                             forward(mL, mR)
                             cur_x -= 1
             if w_y>cur_y:
-                if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y-1>=0 and cur_y<=3):
+                if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y-1>0 and cur_y<3):
                     facing = move("up", facing, mL, mR)
                     forward(mL, mR)
                     cur_y += 1 
                 else:
-                    if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>=0 and cur_x<=3):
+                    if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>0 and cur_x<3):
                         facing = move("right", facing, mL, mR)
                         forward(mL, mR)
                         cur_x += 1
                     else:
-                        if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]) and (cur_y+1>=0 and cur_y<=3):
+                        if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]) and (cur_y+1>0 and cur_y<3):
                             facing = move("down", facing, mL, mR)
                             forward(mL, mR)
                             cur_y += 1
@@ -472,17 +472,17 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                             forward(mL, mR)
                             cur_x -= 1
             if w_x<cur_y:
-                if ("Ch" not in board[cur_y][cur_x-1]) or ("Ph" not in board[cur_y][cur_x-1]) or ("Pw" not in board[cur_y][cur_x-1]) and (cur_x+1>=0 and cur_x<=3):
+                if ("Ch" not in board[cur_y][cur_x-1]) or ("Ph" not in board[cur_y][cur_x-1]) or ("Pw" not in board[cur_y][cur_x-1]) and (cur_x+1>0 and cur_x<3):
                     facing = move("left", facing, mL, mR)
                     forward(mL, mR)
                     cur_x -= 1         
                 else:
-                    if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>=0 and cur_y<=3):
+                    if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>0 and cur_y<3):
                         facing = move("up", facing, mL, mR)
                         forward(mL, mR)
                         cur_y -= 1
                     else:
-                        if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>=0 and cur_x<=3):
+                        if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>0 and cur_x<3):
                             facing = move("right", facing, mL, mR)
                             forward(mL, mR)
                             cur_x += 1
@@ -491,17 +491,17 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                             forward(mL, mR)
                             cur_y += 1                      
             if w_x>cur_y:                
-                if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>=0 and cur_x<=3):
+                if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>0 and cur_x<3):
                     facing = move("right", facing, mL, mR)
                     forward(mL, mR)
                     cur_x += 1         
                 else:
-                    if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>=0 and cur_y<=3):
+                    if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]) and (cur_y+1>0 and cur_y<3):
                         facing = move("up", facing, mL, mR)
                         forward(mL, mR)
                         cur_y -= 1
                     else:
-                        if ("Ch" not in board[cur_y][cur_x-1]) or ("Ph" not in board[cur_y][cur_x-1]) or ("Pw" not in board[cur_y][cur_x-1]) and (cur_x+1>=0 and cur_x<=3):
+                        if ("Ch" not in board[cur_y][cur_x-1]) or ("Ph" not in board[cur_y][cur_x-1]) or ("Pw" not in board[cur_y][cur_x-1]) and (cur_x+1>0 and cur_x<3):
                             facing = move("left", facing, mL, mR)
                             forward(mL, mR)
                             cur_x -= 1
@@ -569,6 +569,10 @@ if __name__ == '__main__':
         sensed = input("Enter sense: ")
         tile_board, hole_count, current_direction, y, x = search(tile_board, sensed, y, x, hole_count, current_direction , mL, mR)
         
+        print("facing:",current_direction)
+        print("x",x)
+        print("y",y)
+
         if current_direction=="STOP":
             print("puzzle solved!")
             break
