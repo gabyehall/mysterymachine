@@ -168,6 +168,15 @@ def check_2(board, cur_y, cur_x):
     hole_check = board[cur_y][cur_x].count("Ph ")
     wump_check = board[cur_y][cur_x].count("Pw ")
     gold_check = board[cur_y][cur_x].count("Pg ")
+    
+    #check if more than one possibility in each
+    poss_count = [[[],[],[],[]],[[],[],[],[]],[[],[],[],[]],[[],[],[],[]]]
+    
+    for i in range(4):
+        for j in range(4):
+            cur_poss_count = board[i][j].count("P")
+            poss_count[i][j] = cur_poss_count
+        
     if hole_check>1:
         pre_overlap = set(board[cur_y][cur_x].strip(".").split(" "))
         for i in range(4):
@@ -178,13 +187,20 @@ def check_2(board, cur_y, cur_x):
                 overlap_count = overlap.count("Ph")
                 cur_tile_type = determine_tile_type(board, i, j)
                 if overlap_count>0 and cur_y!=i and cur_x!=j and (cur_tile_type=="edge" or cur_tile_type=="corner"):
-                    print("delete")
                     board[i][j] = str(board[i][j]).replace("Ph","")
         board[cur_y][cur_x] = "Ch "
     elif wump_check>1:
         board[cur_y][cur_x] = "Cw "
     elif gold_check>1:
         board[cur_y][cur_x] = "Cg "
+    
+    #complete check for possibilities becoming certain if other possiblity removed
+    for i in range(4):
+        for j in range(4):
+            cur_poss_count = board[i][j].count("P")
+            if cur_poss_count<poss_count[i][j] and cur_poss_count==1:
+                board[i][j].replace("P","C")
+    
     return board  
 
 #check-2 applied to entire board
@@ -362,7 +378,7 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                 facing = move("right", facing, mL, mR)
                 forward(mL, mR)
             else:
-                if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]):
+                if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]):
                     facing = move("down", facing, mL, mR)
                     forward(mL, mR)
                 else:
@@ -381,10 +397,58 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
         surround = wumpus_surround(cur_x,cur_y,w_x,w_y)
         #get to wumpus via fastest route
         if surround=="none":
+            if w_y<cur_y:
+                if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]):
+                    facing = move("down", facing, mL, mR)
+                    forward(mL, mR)
+                else:
+                    if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]):
+                        facing = move("right", facing, mL, mR)
+                        forward(mL, mR)
+                    else:
+                        if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]):
+                            facing = move("up", facing, mL, mR)
+                            forward(mL, mR)
+                        else:
+                            facing = move("left", facing, mL, mR)
+                            forward(mL, mR)
+            if w_y>cur_y:
+                if ("Ch" not in board[cur_y+1][cur_x]) or ("Ph" not in board[cur_y+1][cur_x]) or ("Pw" not in board[cur_y+1][cur_x]):
+                    facing = move("up", facing, mL, mR)
+                    forward(mL, mR) 
+                else:
+                    if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]):
+                        facing = move("right", facing, mL, mR)
+                        forward(mL, mR)
+                    else:
+                        if ("Ch" not in board[cur_y-1][cur_x]) or ("Ph" not in board[cur_y-1][cur_x]) or ("Pw" not in board[cur_y-1][cur_x]):
+                            facing = move("down", facing, mL, mR)
+                            forward(mL, mR)
+                        else:
+                            facing = move("left", facing, mL, mR)
+                            forward(mL, mR)
+                            
+                            
+                            
+                            
+                            
+            """ADD ALTERNATIVE TURN DIRECTIONS FOR LEFT AND RIGHT TOO"""                
+                          
             
             
-        
-            """ Write code to get robot to wumpus in shortest possible way """
+            
+            if w_x<cur_y:
+                if ("Ch" not in board[cur_y][cur_x-1]) or ("Ph" not in board[cur_y][cur_x-1]) or ("Pw" not in board[cur_y][cur_x-1]):
+                    facing = move("left", facing, mL, mR)
+                    forward(mL, mR)         
+                    
+                    
+                    
+            if w_x>cur_y:
+                if ("Ch" not in board[cur_y][cur_x+1]) or ("Ph" not in board[cur_y][cur_x+1]) or ("Pw" not in board[cur_y][cur_x+1]):
+                    facing = move("right", facing, mL, mR)
+                    forward(mL, mR)                   
+
         
         else:
             move(surround, facing, mL, mR)
