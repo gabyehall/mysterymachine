@@ -370,8 +370,8 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                     forward(mL, mR)
     #if Cw present in board, head toward that tile to kill it
     elif cw_count>0:
-        c_x = 0
-        c_y = 0
+        w_x = 0
+        w_y = 0
         for i in range(4):
             for j in range(4):
                 if "Cw " in board[i][j]:
@@ -381,7 +381,8 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
         surround = wumpus_surround(cur_x,cur_y,w_x,w_y)
         #get to wumpus via fastest route
         if surround=="none":
-            pass
+            
+            
         
             """ Write code to get robot to wumpus in shortest possible way """
         
