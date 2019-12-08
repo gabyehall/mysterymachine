@@ -279,7 +279,7 @@ def wumpus_check(board):
             pw_count = board[i][j].count("Pw ")
             if pw_count>=2:
                 board[i][j].replace("Pw ","")
-                board[i][j] +=  "Dw "
+                board[i][j] +=  "Cw "
     return board
             
 
