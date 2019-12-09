@@ -439,6 +439,10 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
                     facing = move("left", facing, mL, mR)
                     forward(mL, mR)
                     cur_x -= 1
+                    while(cur_y>=0 and ("Ch" not in board[cur_y][cur_x-1]) and ("Ph" not in board[cur_y][cur_x-1]) and ("Pw" not in board[cur_y][cur_x-1])):
+                        facing = move("left", facing, mL, mR)
+                        forward(mL, mR)
+                        cur_x -= 1
     #if Cw present in board, head toward that tile to kill it
     elif cw_count>0:
         w_x = 0
