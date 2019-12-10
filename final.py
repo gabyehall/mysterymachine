@@ -18,8 +18,8 @@ ON = True
 OFF = False
 
 def forward(left_motor, right_motor):
-    left_motor.on(-40)
-    right_motor.on(-40)
+    left_motor.on(-41)
+    right_motor.on(-41)
     sleep(2)
     left_motor.off()
     right_motor.off()
@@ -169,13 +169,13 @@ def no_smell(board, cur_y, cur_x):
         return board
     else:
         if cur_y-1 > -1:
-            board[cur_y-1][cur_x] += "Ns "
+            board[cur_y-1][cur_x] += "Nw "
         if cur_y+1 < 4:
-            board[cur_y+1][cur_x] += "Ns "
+            board[cur_y+1][cur_x] += "Nw "
         if cur_x-1 > -1:
-            board[cur_y][cur_x-1] += "Ns "
+            board[cur_y][cur_x-1] += "Nw "
         if cur_x+1 < 4:
-            board[cur_y][cur_x+1] += "Ns "
+            board[cur_y][cur_x+1] += "Nw "
         board[cur_y][cur_x] += "x "
         return board
 
@@ -304,7 +304,7 @@ def determine_tile_type(board, cur_y, cur_x):
 #runs through all the logic to update the board
 #WORK IN PROGRESS - WILL THERE BE MULTIPLE INPUTS? (will aftect 'N' statements)
 def run_round(board, sense, cur_y, cur_x, hole_count):
-    if "nothing" in sense:
+    if "0" in sense:
         board[cur_y][cur_x] = "S "
         if cur_y-1>=0:
             board[cur_y-1][cur_x] = "S "
@@ -314,19 +314,25 @@ def run_round(board, sense, cur_y, cur_x, hole_count):
             board[cur_y][cur_x-1] = "S "
         if cur_x+1>=0:
             board[cur_y][cur_x+1] = "S "
-    if "breeze" in sense:
-        board = breeze(board, cur_y, cur_x, hole_count)
-        hole_count += 1
-    if "smell" in sense:
-        board = smell(board, cur_y, cur_x)
-    if "glitter" in sense:
-        board = glitter(board, cur_y, cur_x)
-    if "breeze" not in sense and sense!="":
-        board = no_breeze(board, cur_y, cur_x)
-    if "smell" not in sense and sense!="":
-        board = no_smell(board, cur_y, cur_x)
-    if "glitter" not in sense and sense!="":
-        board = no_glitter(board, cur_y, cur_x)
+    if "0" not in sense:
+        if "1" in sense:
+            board = breeze(board, cur_y, cur_x, hole_count)
+            hole_count += 1
+        if "2" in sense:
+            board = smell(board, cur_y, cur_x)
+        if "4" in sense:
+            board = glitter(board, cur_y, cur_x)
+        if "1" not in sense:
+            board = no_breeze(board, cur_y, cur_x)
+        if "2" not in sense:
+            board = no_smell(board, cur_y, cur_x)
+        if "4" not in sense:
+            board = no_glitter(board, cur_y, cur_x)
+    if "5" in sense: #maybe make this an else statement, since it's the only other option
+        gun.on(100)
+        sleep(5)
+        gun.off()
+
     board = n_check(board)
     board = safe_check(board)
     board = wumpus_check(board)
@@ -403,7 +409,6 @@ def wumpus_surround(cur_x, cur_y, w_x, w_y):
 #applies the move function and automatically - makes robot move autonmously
 def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
     board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)
-    print(cur_y)
 
     cw_count = 0
     for i in range(4):
@@ -418,51 +423,50 @@ def search(board, sense, cur_y, cur_x, hole_count, facing, mL, mR):
             cur_y -= 1
         else:
             if(cur_y+1>=0 and cur_y+1<=3):
-                if ("Ch" not in board[cur_y+1][cur_x]) and ("Ph" not in board[cur_y+1][cur_x]) and ("Pw" not in board[cur_y+1][cur_x]):
-                    
-                    
-                    """
-                    I put a while loop to get the robot to go all the way back down
-                    and it prompts for a sense. The problem is that I don't think
-                    it is applying the sense to the board (using the run_round function).
-                    Is there any way to get it to go to the right while still stopping
-                    and applying the sense to the board.
-
-                    It's a matter of placement with the while loop. I can fix it before
-                    plenary but if they have any suggestions let me know.
-                    """
-                    
-                    
+                if ("Ch" not in board[cur_y+1][cur_x]) and ("Ph" not in board[cur_y+1][cur_x]) and ("Pw" not in board[cur_y+1][cur_x]):                 
                     while(cur_y<=3):
                         if cur_y+1<=3:
                             if("Ch" not in board[cur_y+1][cur_x]) and ("Ph" not in board[cur_y+1][cur_x]) and ("Pw" not in board[cur_y+1][cur_x]):
                                 facing = move("down", facing, mL, mR)
                                 forward(mL, mR)
                                 cur_y += 1
-                        if(cur_x+1>=0 and cur_x+1<=3):
-                            if ("Ch" not in board[cur_y][cur_x+1]) and ("Ph" not in board[cur_y][cur_x+1]) and ("Pw" not in board[cur_y][cur_x+1]):
-                                facing = move("right", facing, mL, mR)
-                                forward(mL, mR)
-                                cur_x += 1                
-                            else:
-                                facing = move("left", facing, mL, mR)
-                                forward(mL, mR)
-                                cur_x -= 1
-                        sense = input("Enter sense: ")
-                        board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)
-                else:
-                    if ("Ch" not in board[cur_y][cur_x+1]) and ("Ph" not in board[cur_y][cur_x+1]) and ("Pw" not in board[cur_y][cur_x+1]) and (cur_x+1>=0 and cur_x+1<=3):
-                        facing = move("right", facing, mL, mR)
-                        forward(mL, mR)
-                        cur_x += 1                
-                    else:
-                        facing = move("left", facing, mL, mR)
-                        forward(mL, mR)
-                        cur_x -= 1
-                        while(cur_y>=0 and ("Ch" not in board[cur_y][cur_x-1]) and ("Ph" not in board[cur_y][cur_x-1]) and ("Pw" not in board[cur_y][cur_x-1])):
+                                print("MOVING DOWN")
+                                sense = input("Enter sense(2): ")
+                                board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)
+                        else:
+                            break
+                    if(cur_x+1>=0 and cur_x+1<=3):
+                        if ("Ch" not in board[cur_y][cur_x+1]) and ("Ph" not in board[cur_y][cur_x+1]) and ("Pw" not in board[cur_y][cur_x+1]):
+                            facing = move("right", facing, mL, mR)
+                            forward(mL, mR)
+                            cur_x += 1  
+                            print("MOVING RIGHT")
+                            sense = input("Enter sense(3): ")
+                            board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)              
+                        else:
                             facing = move("left", facing, mL, mR)
                             forward(mL, mR)
                             cur_x -= 1
+                            print("MOVING LEFT")
+                            sense = input("Enter sense(4): ")
+                            board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)
+                    #sense = input("Enter sense: ")
+                    #board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)
+                else:
+                    if (cur_x+1>=0 and cur_x+1<=3):
+                        if ("Ch" not in board[cur_y][cur_x+1]) and ("Ph" not in board[cur_y][cur_x+1]) and ("Pw" not in board[cur_y][cur_x+1]):
+                            facing = move("right", facing, mL, mR)
+                            forward(mL, mR)
+                            cur_x += 1                
+                        else:
+                            facing = move("left", facing, mL, mR)
+                            forward(mL, mR)
+                            cur_x -= 1
+                            while(cur_y>=0 and ("Ch" not in board[cur_y][cur_x-1]) and ("Ph" not in board[cur_y][cur_x-1]) and ("Pw" not in board[cur_y][cur_x-1])):
+                                facing = move("left", facing, mL, mR)
+                                forward(mL, mR)
+                                cur_x -= 1
+                                board,hole_count = run_round(board, sense, cur_y, cur_x, hole_count)
     #if Cw present in board, head toward that tile to kill it
     elif cw_count>0:
         w_x = 0
